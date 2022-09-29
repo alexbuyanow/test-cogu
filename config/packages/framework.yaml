@@ -17,24 +17,6 @@ framework:
     php_errors:
         log: true
 
-    http_client:
-        scoped_clients:
-            buyers.report.client:
-                base_uri: '%env(resolve:BUYERS_REPORT_URL)%'
-                timeout: 20
-                headers:
-                    Accept: application/json
-                    User-Agent: namespinner/v1
-                    Authorization: '%env(resolve:BUYERS_REPORT_AUTH)%'
-
-            centralnic.client:
-                base_uri: '%env(resolve:CENTRALNIC_URL)%'
-                timeout: 20
-                headers:
-                    Accept: application/json
-                    User-Agent: namespinner/v1
-                    Authorization: '%env(resolve:CENTRALNIC_API_KEY)%'
-
 
 when@test:
     framework:
