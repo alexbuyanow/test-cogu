@@ -2,9 +2,11 @@
 
 namespace App\Catalog\Repository;
 
+use App\Catalog\Entity\Book;
 use App\Catalog\Entity\Genre;
 use App\Catalog\Filter\GenreFilterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -36,7 +38,11 @@ class GenreRepository extends ServiceEntityRepository implements GenreRepository
      */
     public function getList(GenreFilterInterface $filter): array
     {
-        return [];
+        $builder = $this->createQueryBuilder('g');
+
+        $this->applyFilter($builder, $filter);
+
+        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -46,7 +52,8 @@ class GenreRepository extends ServiceEntityRepository implements GenreRepository
      */
     public function save(Genre $genre): void
     {
-
+        $this->_em->persist($genre);
+        $this->_em->flush();
     }
 
     /**
@@ -56,7 +63,8 @@ class GenreRepository extends ServiceEntityRepository implements GenreRepository
      */
     public function remove(Genre $genre): void
     {
-
+        $this->_em->remove($genre);
+        $this->_em->flush();
     }
 
     /**
@@ -68,6 +76,26 @@ class GenreRepository extends ServiceEntityRepository implements GenreRepository
      */
     public function isInUse(Genre $genre): bool
     {
-        return true;
+        $builder = $this->_em->createQueryBuilder()
+            ->select()
+            ->from(Book::class, 'b');
+        $builder->where($builder->expr()->eq('b.genre', ':genre'))
+            ->setParameter('genre', $genre);
+
+        return (bool) $builder->getQuery()->getFirstResult();
+    }
+
+    /**
+     * Применяет фильтр списков
+     *
+     * @param QueryBuilder         $builder
+     * @param GenreFilterInterface $filter
+     */
+    private function applyFilter(QueryBuilder $builder, GenreFilterInterface $filter): void
+    {
+        if ($name = $filter->getName()) {
+            $builder->andWhere($builder->expr()->eq('g.name', ':name'))
+                ->setParameter('name', $name);
+        }
     }
 }

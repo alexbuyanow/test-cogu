@@ -3,9 +3,11 @@
 namespace App\Catalog\Repository;
 
 use App\Catalog\Entity\Author;
+use App\Catalog\Entity\Book;
 use App\Catalog\Entity\Genre;
 use App\Catalog\Filter\AuthorFilterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,7 +39,11 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
      */
     public function getList(AuthorFilterInterface $filter): array
     {
-        return [];
+        $builder = $this->createQueryBuilder('a');
+
+        $this->applyFilter($builder, $filter);
+
+        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -47,7 +53,8 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
      */
     public function save(Author $author): void
     {
-
+        $this->_em->persist($author);
+        $this->_em->flush();
     }
 
     /**
@@ -57,7 +64,8 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
      */
     public function remove(Author $author): void
     {
-
+        $this->_em->remove($author);
+        $this->_em->flush();
     }
 
     /**
@@ -69,6 +77,26 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
      */
     public function isInUse(Author $author): bool
     {
-        return true;
+        $builder = $this->_em->createQueryBuilder()
+            ->select()
+            ->from(Book::class, 'b');
+        $builder->where($builder->expr()->eq('b.author', ':author'))
+            ->setParameter('author', $author);
+
+        return (bool) $builder->getQuery()->getFirstResult();
+    }
+
+    /**
+     * Применяет фильтр списков
+     *
+     * @param QueryBuilder          $builder
+     * @param AuthorFilterInterface $filter
+     */
+    private function applyFilter(QueryBuilder $builder, AuthorFilterInterface $filter): void
+    {
+        if ($name = $filter->getName()) {
+            $builder->andWhere($builder->expr()->eq('a.name', ':name'))
+                ->setParameter('name', $name);
+        }
     }
 }

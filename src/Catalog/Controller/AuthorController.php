@@ -56,7 +56,7 @@ class AuthorController
     public function create(Request $request): Response
     {
         $form = $this->formFactory->create(AuthorType::class);
-        $form->submit($request->request->all());
+        $form->submit($request->toArray());
 
         if (!$form->isValid()) {
             return new JsonResponse(null, 400);
@@ -79,7 +79,7 @@ class AuthorController
     public function change(Author $author, Request $request): Response
     {
         $form = $this->formFactory->create(AuthorType::class);
-        $form->submit($request->request->all());
+        $form->submit($request->toArray());
 
         if (!$form->isValid()) {
             return new JsonResponse(null, 400);

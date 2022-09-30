@@ -56,10 +56,10 @@ class GenreController
     public function create(Request $request): Response
     {
         $form = $this->formFactory->create(GenreType::class);
-        $form->submit($request->request->all());
+        $form->submit($request->toArray());
 
         if (!$form->isValid()) {
-            return new JsonResponse(null, 400);
+            return new JsonResponse($form->getErrors(), 400);
         }
 
         $genre = $this->genreService->create($form->getData());
@@ -79,10 +79,10 @@ class GenreController
     public function change(Genre $genre, Request $request): Response
     {
         $form = $this->formFactory->create(GenreType::class);
-        $form->submit($request->request->all());
+        $form->submit($request->toArray());
 
         if (!$form->isValid()) {
-            return new JsonResponse(null, 400);
+            return new JsonResponse($form->getErrors(), 400);
         }
 
         $genre = $this->genreService->change($genre, $form->getData());

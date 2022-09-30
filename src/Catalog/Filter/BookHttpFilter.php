@@ -22,4 +22,44 @@ class BookHttpFilter implements BookFilterInterface
     {
         return $this->request->query->get('name', '');
     }
+
+    /**
+     * Возвращает автора
+     *
+     * @return string
+     */
+    public function getAuthor(): string
+    {
+        return $this->request->query->get('author', '');
+    }
+
+    /**
+     * Возвращает жанр
+     *
+     * @return string
+     */
+    public function getGenre(): string
+    {
+        return $this->request->query->get('genre', '');
+    }
+
+    /**
+     * Возвращает лимит
+     *
+     * @return int
+     */
+    public function getLimit(): int
+    {
+        return $this->request->query->get('limit', 0);
+    }
+
+    /**
+     * Возвращает оффсет
+     *
+     * @return int
+     */
+    public function getOffset(): int
+    {
+        return $this->request->query->get('offset', 0);
+    }
 }
