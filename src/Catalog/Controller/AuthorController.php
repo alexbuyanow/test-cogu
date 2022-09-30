@@ -6,6 +6,7 @@ use App\Catalog\Entity\Author;
 use App\Catalog\Filter\AuthorHttpFilter;
 use App\Catalog\Form\AuthorType;
 use App\Catalog\Service\AuthorServiceInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,7 @@ class AuthorController
     public function __construct(
         private readonly AuthorServiceInterface $authorService,
         private readonly FormFactoryInterface  $formFactory,
+        private readonly SerializerInterface   $serializer,
     ) {
     }
 
@@ -41,8 +43,9 @@ class AuthorController
     public function getList(Request $request): Response
     {
         $filter = new AuthorHttpFilter($request);
+        $authors = $this->authorService->getList($filter);
 
-        return new JsonResponse($this->authorService->getList($filter));
+        return new JsonResponse($this->serializer->serialize($authors, 'json'));
     }
 
     /**
@@ -64,7 +67,7 @@ class AuthorController
 
         $author = $this->authorService->create($form->getData());
 
-        return new JsonResponse(null, 201);
+        return new JsonResponse($this->serializer->serialize($author, 'json'), 201);
     }
 
     /**
@@ -87,7 +90,7 @@ class AuthorController
 
         $author = $this->authorService->change($author, $form->getData());
 
-        return new JsonResponse(null);
+        return new JsonResponse($this->serializer->serialize($author, 'json'));
     }
 
     /**

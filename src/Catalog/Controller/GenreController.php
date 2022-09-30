@@ -6,6 +6,7 @@ use App\Catalog\Entity\Genre;
 use App\Catalog\Filter\GenreHttpFilter;
 use App\Catalog\Form\GenreType;
 use App\Catalog\Service\GenreServiceInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,12 @@ class GenreController
      *
      * @param GenreServiceInterface $genreService
      * @param FormFactoryInterface $formFactory
+     * @param SerializerInterface  $serializer
      */
     public function __construct(
         private readonly GenreServiceInterface $genreService,
         private readonly FormFactoryInterface $formFactory,
+        private readonly SerializerInterface $serializer,
     ) {
     }
 
@@ -41,8 +44,9 @@ class GenreController
     public function getList(Request $request): Response
     {
         $filter = new GenreHttpFilter($request);
+        $genres = $this->genreService->getList($filter);
 
-        return new JsonResponse($this->genreService->getList($filter));
+        return new JsonResponse($this->serializer->serialize($genres, 'json'));
     }
 
     /**
@@ -64,7 +68,7 @@ class GenreController
 
         $genre = $this->genreService->create($form->getData());
 
-        return new JsonResponse(null, 201);
+        return new JsonResponse($this->serializer->serialize($genre, 'json'), 201);
     }
 
     /**
@@ -87,7 +91,7 @@ class GenreController
 
         $genre = $this->genreService->change($genre, $form->getData());
 
-        return new JsonResponse(null);
+        return new JsonResponse($this->serializer->serialize($genre, 'json'));
     }
 
     /**

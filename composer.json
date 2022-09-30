@@ -14,6 +14,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11",
+        "jms/serializer-bundle": "^4.2",
         "nelmio/cors-bundle": "^2.2",
         "nesbot/carbon": "^2.59",
         "nocarrier/hal": "^0.9.14",

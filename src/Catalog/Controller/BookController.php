@@ -6,6 +6,7 @@ use App\Catalog\Entity\Book;
 use App\Catalog\Filter\BookHttpFilter;
 use App\Catalog\Form\BookType;
 use App\Catalog\Service\BookServiceInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\BaseType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +29,7 @@ class BookController
     public function __construct(
         private readonly BookServiceInterface $bookService,
         private readonly FormFactoryInterface $formFactory,
+        private readonly SerializerInterface $serializer,
     ) {
     }
 
@@ -42,8 +44,9 @@ class BookController
     public function getList(Request $request): Response
     {
         $filter = new BookHttpFilter($request);
+        $books = $this->bookService->getList($filter);
 
-        return new JsonResponse($this->bookService->getList($filter));
+        return new JsonResponse($this->serializer->serialize($books, 'json'));
     }
 
     /**
@@ -63,9 +66,9 @@ class BookController
             return new JsonResponse(null, 400);
         }
 
-        $account = $this->bookService->create($form->getData());
+        $book = $this->bookService->create($form->getData());
 
-        return new JsonResponse(null, 201);
+        return new JsonResponse($this->serializer->serialize($book, 'json'), 201);
     }
 
     /**
@@ -86,9 +89,9 @@ class BookController
             return new JsonResponse(null, 400);
         }
 
-        $account = $this->bookService->change($book, $form->getData());
+        $book = $this->bookService->change($book, $form->getData());
 
-        return new JsonResponse(null);
+        return new JsonResponse($this->serializer->serialize($book, 'json'));
     }
 
     /**
