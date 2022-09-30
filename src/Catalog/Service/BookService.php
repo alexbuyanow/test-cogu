@@ -5,9 +5,22 @@ namespace App\Catalog\Service;
 use App\Catalog\Entity\Book;
 use App\Catalog\Entity\BookData;
 use App\Catalog\Filter\BookFilterInterface;
+use App\Catalog\Repository\BookRepositoryInterface;
 
+/**
+ * Сервис книг
+ */
 class BookService implements BookServiceInterface
 {
+    /**
+     * Конструктор
+     *
+     * @param BookRepositoryInterface $bookRepository
+     */
+    public function __construct(private readonly BookRepositoryInterface $bookRepository)
+    {
+    }
+
     /**
      * Возвращает список книг
      *
@@ -17,19 +30,22 @@ class BookService implements BookServiceInterface
      */
     public function getList(BookFilterInterface $filter): array
     {
-        return [];
+        return $this->bookRepository->getList($filter);
     }
 
     /**
      * Создает книгу
      *
-     * @param BookData $book
+     * @param BookData $data
      *
      * @return Book
      */
-    public function create(BookData $book): Book
+    public function create(BookData $data): Book
     {
-        return new Book(new BookData('', new \DateTime(), 0, [], []));
+        $book = new Book($data);
+        $this->bookRepository->save($book);
+
+        return $book;
     }
 
     /**
@@ -42,7 +58,10 @@ class BookService implements BookServiceInterface
      */
     public function change(Book $book, BookData $data): Book
     {
-        return new Book(new BookData('', new \DateTime(), 0, [], []));
+        $book->change($data);
+        $this->bookRepository->save($book);
+
+        return $book;
     }
 
     /**
@@ -52,6 +71,6 @@ class BookService implements BookServiceInterface
      */
     public function remove(Book $book): void
     {
-
+        $this->bookRepository->remove($book);
     }
 }

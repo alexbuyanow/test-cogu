@@ -62,12 +62,12 @@ class Genre
     }
 
     /**
-     * Устанавливает название
+     * Изменяет данные жанра
      *
-     * @param string $name
+     * @param GenreData $data
      */
-    public function setName(string $name): void
+    public function change(GenreData $data): void
     {
-        $this->name = $name;
+        $this->name = $data->getName();
     }
 }

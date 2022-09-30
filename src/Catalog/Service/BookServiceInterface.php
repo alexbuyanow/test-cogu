@@ -23,11 +23,11 @@ interface BookServiceInterface
     /**
      * Создает книгу
      *
-     * @param BookData $book
+     * @param BookData $data
      *
      * @return Book
      */
-    public function create(BookData $book): Book;
+    public function create(BookData $data): Book;
 
     /**
      * Изменяет книгу

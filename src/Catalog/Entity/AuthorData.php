@@ -27,7 +27,7 @@ class AuthorData
         private string $name,
         #[Assert\NotBlank]
         private DateTimeInterface $birthDate,
-        #[Assert\Choice(callback: 'getSexTypesList')]
+        #[Assert\Choice(callback: 'getGenderTypesList')]
         private string $gender,
     ) {
     }
@@ -97,7 +97,7 @@ class AuthorData
      *
      * @return string[]
      */
-    public function getSexTypesList(): array
+    public function getGenderTypesList(): array
     {
         return [
             static::GENDER_MALE,

@@ -5,9 +5,22 @@ namespace App\Catalog\Service;
 use App\Catalog\Entity\Genre;
 use App\Catalog\Entity\GenreData;
 use App\Catalog\Filter\GenreFilterInterface;
+use App\Catalog\Repository\GenreRepositoryInterface;
 
+/**
+ * Сервис жанров
+ */
 class GenreService implements GenreServiceInterface
 {
+    /**
+     * Конструктор
+     *
+     * @param GenreRepositoryInterface $genreRepository
+     */
+    public function __construct(private readonly GenreRepositoryInterface $genreRepository)
+    {
+    }
+
     /**
      * Возвращает список жанров
      *
@@ -17,19 +30,22 @@ class GenreService implements GenreServiceInterface
      */
     public function getList(GenreFilterInterface $filter): array
     {
-        return [];
+        return $this->genreRepository->getList($filter);
     }
 
     /**
      * Создает жанр
      *
-     * @param GenreData $genre
+     * @param GenreData $genreData
      *
      * @return Genre
      */
-    public function create(GenreData $genre): Genre
+    public function create(GenreData $genreData): Genre
     {
-        return new Genre(new GenreData(''));
+        $genre = new Genre($genreData);
+        $this->genreRepository->save($genre);
+
+        return $genre;
     }
 
     /**
@@ -42,7 +58,10 @@ class GenreService implements GenreServiceInterface
      */
     public function change(Genre $genre, GenreData $data): Genre
     {
-        return new Genre(new GenreData(''));
+        $genre->change($data);
+        $this->genreRepository->save($genre);
+
+        return $genre;
     }
 
     /**
@@ -52,6 +71,10 @@ class GenreService implements GenreServiceInterface
      */
     public function remove(Genre $genre): void
     {
+        if ($this->genreRepository->isInUse($genre)) {
+            return;
+        }
 
+        $this->genreRepository->remove($genre);
     }
 }

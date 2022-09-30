@@ -62,7 +62,7 @@ class GenreController
             return new JsonResponse(null, 400);
         }
 
-        $account = $this->genreService->create($form->getData());
+        $genre = $this->genreService->create($form->getData());
 
         return new JsonResponse(null, 201);
     }
@@ -75,7 +75,7 @@ class GenreController
      *
      * @return Response
      */
-    #[Route(name: 'genre.change', methods: ['PATCH'])]
+    #[Route(name: 'genre.change', methods: ['PUT'])]
     public function change(Genre $genre, Request $request): Response
     {
         $form = $this->formFactory->create(GenreType::class);
@@ -85,7 +85,7 @@ class GenreController
             return new JsonResponse(null, 400);
         }
 
-        $account = $this->genreService->change($genre, $form->getData());
+        $genre = $this->genreService->change($genre, $form->getData());
 
         return new JsonResponse(null);
     }

@@ -81,16 +81,6 @@ class Author
     }
 
     /**
-     * Устанавливает имя
-     *
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
      * Возвращает дату рождения
      *
      * @return DateTimeInterface
@@ -98,16 +88,6 @@ class Author
     public function getBirthDate(): DateTimeInterface
     {
         return $this->birthDate;
-    }
-
-    /**
-     * Устанавливает дату рождения
-     *
-     * @param DateTimeInterface $birthDate
-     */
-    public function setBirthDate(DateTimeInterface $birthDate): void
-    {
-        $this->birthDate = $birthDate;
     }
 
     /**
@@ -121,12 +101,14 @@ class Author
     }
 
     /**
-     * Устанавливает пол
+     * Изменяет данные автора
      *
-     * @param string|null $gender
+     * @param AuthorData $data
      */
-    public function setGender(?string $gender): void
+    public function change(AuthorData $data): void
     {
-        $this->gender = $gender;
+        $this->name      = $data->getName();
+        $this->birthDate = $data->getBirthDate();
+        $this->gender    = $data->getGender();
     }
 }

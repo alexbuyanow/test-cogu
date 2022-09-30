@@ -3,6 +3,7 @@
 namespace App\Catalog\Repository;
 
 use App\Catalog\Entity\Genre;
+use App\Catalog\Filter\GenreFilterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,7 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Genre[]    findAll()
  * @method Genre[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GenreRepository extends ServiceEntityRepository
+class GenreRepository extends ServiceEntityRepository implements GenreRepositoryInterface
 {
     /**
      * Конструктор
@@ -24,5 +25,49 @@ class GenreRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Genre::class);
+    }
+
+    /**
+     * Возвращает список жанров
+     *
+     * @param GenreFilterInterface $filter
+     *
+     * @return Genre[]
+     */
+    public function getList(GenreFilterInterface $filter): array
+    {
+        return [];
+    }
+
+    /**
+     * Сохраняет жанр
+     *
+     * @param Genre $genre
+     */
+    public function save(Genre $genre): void
+    {
+
+    }
+
+    /**
+     * Удаляет жанр
+     *
+     * @param Genre $genre
+     */
+    public function remove(Genre $genre): void
+    {
+
+    }
+
+    /**
+     * Используется ли жанр
+     *
+     * @param Genre $genre
+     *
+     * @return bool
+     */
+    public function isInUse(Genre $genre): bool
+    {
+        return true;
     }
 }

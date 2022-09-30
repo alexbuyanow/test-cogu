@@ -3,6 +3,7 @@
 namespace App\Catalog\Repository;
 
 use App\Catalog\Entity\Book;
+use App\Catalog\Filter\BookFilterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,5 +25,37 @@ class BookRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);
+    }
+
+    /**
+     * Возвращает список книг
+     *
+     * @param BookFilterInterface $filter
+     *
+     * @return Book[]
+     */
+    public function getList(BookFilterInterface $filter): array
+    {
+        return [];
+    }
+
+    /**
+     * Сохраняет книгу
+     *
+     * @param Book $book
+     */
+    public function save(Book $book)
+    {
+
+    }
+
+    /**
+     * Удаляет книгу
+     *
+     * @param Book $book
+     */
+    public function remove(Book $book): void
+    {
+
     }
 }

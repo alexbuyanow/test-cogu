@@ -76,7 +76,7 @@ class BookController
      *
      * @return Response
      */
-    #[Route(name: 'book.change', methods: ['PATCH'])]
+    #[Route(name: 'book.change', methods: ['PUT'])]
     public function change(Book $book, Request $request): Response
     {
         $form = $this->formFactory->create(BookType::class);

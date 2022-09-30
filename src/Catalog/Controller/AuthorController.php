@@ -62,7 +62,7 @@ class AuthorController
             return new JsonResponse(null, 400);
         }
 
-        $account = $this->authorService->create($form->getData());
+        $author = $this->authorService->create($form->getData());
 
         return new JsonResponse(null, 201);
     }
@@ -75,7 +75,7 @@ class AuthorController
      *
      * @return Response
      */
-    #[Route(name: 'author.change', methods: ['PATCH'])]
+    #[Route(name: 'author.change', methods: ['PUT'])]
     public function change(Author $author, Request $request): Response
     {
         $form = $this->formFactory->create(AuthorType::class);
@@ -85,7 +85,7 @@ class AuthorController
             return new JsonResponse(null, 400);
         }
 
-        $account = $this->authorService->change($author, $form->getData());
+        $author = $this->authorService->change($author, $form->getData());
 
         return new JsonResponse(null);
     }

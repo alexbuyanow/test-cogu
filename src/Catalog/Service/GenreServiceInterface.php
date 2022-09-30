@@ -23,11 +23,11 @@ interface GenreServiceInterface
     /**
      * Создает жанр
      *
-     * @param GenreData $genre
+     * @param GenreData $genreData
      *
      * @return Genre
      */
-    public function create(GenreData $genre): Genre;
+    public function create(GenreData $genreData): Genre;
 
     /**
      * Изменяет жанр
